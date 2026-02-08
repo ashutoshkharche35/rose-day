@@ -1,120 +1,60 @@
-// Initialize animation on page load
-document.addEventListener('DOMContentLoaded', function() {
-    animateRoses();
-    createStarfield();
-});
+document.querySelectorAll('.flower-container').forEach(el => {
+  el.innerHTML = `<div class="flower-top">
+                  <div class="flower-petal flower-petal__1"></div>
+                  <div class="flower-petal flower-petal__2"></div>
+                  <div class="flower-petal flower-petal__3"></div>
+                  <div class="flower-petal flower-petal__4"></div>
+                  <div class="flower-petal flower-petal__5"></div>
+                  <div class="flower-petal flower-petal__6"></div>
+                  <div class="flower-petal flower-petal__7"></div>
+                  <div class="flower-petal flower-petal__8"></div>
+                  <div class="flower-circle"></div>
+                  <div class="flower-light flower-light__1"></div>
+                  <div class="flower-light flower-light__2"></div>
+                  <div class="flower-light flower-light__3"></div>
+                  <div class="flower-light flower-light__4"></div>
+                  <div class="flower-light flower-light__5"></div>
+                  <div class="flower-light flower-light__6"></div>
+                  <div class="flower-light flower-light__7"></div>
+                  <div class="flower-light flower-light__8"></div>
+                  </div>
 
-// Animate all roses with staggered effect
-function animateRoses() {
-    const roseContainers = document.querySelectorAll('.rose-container');
-    
-    roseContainers.forEach((container, containerIndex) => {
-        const rose = container.querySelector('.rose');
-        const petals = container.querySelectorAll('.petal');
-        const roseCenter = container.querySelector('.rose-center');
-        
-        // Stagger the animation of each rose
-        setTimeout(() => {
-            // Bloom the rose
-            rose.style.animation = 'bloom 3s ease-out forwards';
-            
-            // Animate petals individually
-            petals.forEach((petal, petalIndex) => {
-                petal.style.animation = `bloom-petal 3s ease-out ${petalIndex * 0.1}s forwards`;
-            });
-            
-            // Animate center
-            if (roseCenter) {
-                roseCenter.style.animation = `bloom 3s ease-out ${petals.length * 0.1}s forwards`;
-            }
-        }, containerIndex * 800);
+                  <div class="flower-bottom">
+                  <div class="flower-stem"></div>
+                  <div class="flower-leaf flower-leaf__1"></div>
+                  <div class="flower-leaf flower-leaf__2"></div>
+                  <div class="flower-leaf flower-leaf__3"></div>
+                  <div class="flower-leaf flower-leaf__4"></div>
+                  <div class="flower-leaf flower-leaf__5"></div>
+                  <div class="flower-leaf flower-leaf__6"></div>
+
+                  <div class="flower-grass flower-grass__1"></div>
+                  <div class="flower-grass flower-grass__2"></div>
+                  <div class="flower-grass flower-grass__3"></div>
+                  <div class="flower-grass flower-grass__4"></div>
+                  </div>`;
     });
-}
 
-// Create a starfield effect in the background
-function createStarfield() {
-    const stars = document.querySelector('.stars');
+    const flowers = Array.from(document.querySelectorAll('.flower-container'));
+    const animatedClass = 'animate';
     
-    for (let i = 0; i < 50; i++) {
-        const star = document.createElement('div');
-        star.style.position = 'absolute';
-        star.style.width = Math.random() * 2 + 1 + 'px';
-        star.style.height = star.style.width;
-        star.style.backgroundColor = 'white';
-        star.style.borderRadius = '50%';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.opacity = Math.random() * 0.7 + 0.3;
-        star.style.animation = `twinkle ${Math.random() * 3 + 2}s infinite`;
-        star.style.animationDelay = Math.random() * 2 + 's';
-        
-        stars.appendChild(star);
-    }
-}
-
-// Add interactivity - click to reset animation
-document.addEventListener('click', function() {
-    const roseContainers = document.querySelectorAll('.rose-container');
+    flowers[0].classList.add(animatedClass);
     
-    roseContainers.forEach(container => {
-        const rose = container.querySelector('.rose');
-        const petals = container.querySelectorAll('.petal');
-        const roseCenter = container.querySelector('.rose-center');
-        
-        // Remove animations
-        rose.style.animation = 'none';
-        petals.forEach(petal => {
-            petal.style.animation = 'none';
-        });
-        if (roseCenter) {
-            roseCenter.style.animation = 'none';
+    setTimeout(() => {
+      for (let i = 1; i <= 2 && i < flowers.length; i++) {
+        flowers[i].classList.add(animatedClass);
+      }
+    
+      let remaining = flowers.slice(3); 
+      const interval = setInterval(() => {
+        if (remaining.length === 0) {
+          clearInterval(interval);
+          return;
         }
-        
-        // Trigger reflow to restart animation
-        void rose.offsetWidth;
-        
-        // Restart animations
-        animateRoses();
-    });
-});
-
-// Add keyboard shortcut to reset (press 'R')
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'r' || event.key === 'R') {
-        const roseContainers = document.querySelectorAll('.rose-container');
-        
-        roseContainers.forEach(container => {
-            const rose = container.querySelector('.rose');
-            const petals = container.querySelectorAll('.petal');
-            const roseCenter = container.querySelector('.rose-center');
-            
-            rose.style.animation = 'none';
-            petals.forEach(petal => {
-                petal.style.animation = 'none';
-            });
-            if (roseCenter) {
-                roseCenter.style.animation = 'none';
-            }
-            
-            void rose.offsetWidth;
-            
-            animateRoses();
-        });
-    }
-});
-
-// Mouse hover effect
-document.addEventListener('mouseover', function(event) {
-    if (event.target.closest('.rose-container')) {
-        const container = event.target.closest('.rose-container');
-        container.style.transform = 'scale(1.1)';
-        container.style.transition = 'transform 0.3s ease';
-    }
-});
-
-document.addEventListener('mouseout', function(event) {
-    if (event.target.closest('.rose-container')) {
-        const container = event.target.closest('.rose-container');
-        container.style.transform = 'scale(1)';
-    }
-});
+    
+        const randomIndex = Math.floor(Math.random() * remaining.length);
+        const el = remaining.splice(randomIndex, 1)[0]; 
+        el.classList.add(animatedClass);
+      }, 500);
+    
+    }, 3000);
